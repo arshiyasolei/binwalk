@@ -43,13 +43,17 @@ def which(command):
     usr_local_bin = os.path.sep.join([os.path.sep, 'usr', 'local', 'bin', command])
 
     try:
-        location = subprocess.Popen(
-            ["which", command],
-            shell=False, stdout=subprocess.PIPE).communicate()[0].strip()
+        #For Windwos
+        if os.name == 'nt':
+            location = subprocess.Popen(
+                ["where", command],
+                shell=True, stdout=subprocess.PIPE).communicate()[0].strip()
+        else:
+             location = subprocess.Popen(
+                ["which", command],
+                shell=True, stdout=subprocess.PIPE).communicate()[0].strip()
     except KeyboardInterrupt as e:
         raise e
-    except Exception as e:
-        pass
 
     if not location and os.path.exists(usr_local_bin):
         location = usr_local_bin
